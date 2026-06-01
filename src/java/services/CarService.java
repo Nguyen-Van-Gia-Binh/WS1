@@ -53,4 +53,67 @@ public class CarService {
             throw new Exception("Đăng ký xe thất bại. Biển số " + plateFormatted + " có thể đã được đăng ký trước đó!");
         }
     }
+
+    /**
+     * Cập nhật thông tin xe của khách hàng.
+     */
+    public void updateCar(int customerId, int plateId, String licensePlate, String brand, String model, String color) throws Exception {
+        if (licensePlate == null || licensePlate.trim().isEmpty()) {
+            throw new Exception("Biển số xe không được để trống!");
+        }
+
+        String plateFormatted = licensePlate.trim().toUpperCase();
+
+        // Regex định dạng biển số xe Việt Nam (server-side)
+        String regex = "^\\d{2}[A-Z]\\d-\\d{4,5}$"
+                     + "|^\\d{2}[A-Z]\\d-\\d{3}\\.\\d{2}$"
+                     + "|^\\d{2}[A-Z]-\\d{4,5}$"
+                     + "|^\\d{2}[A-Z]-\\d{3}\\.\\d{2}$";
+
+        if (!plateFormatted.matches(regex)) {
+            throw new Exception("Biển số xe không đúng định dạng Việt Nam! Ví dụ hợp lệ: 30A1-1234 hoặc 51F1-999.99");
+        }
+
+        Car car = new Car(
+            plateId,
+            customerId,
+            plateFormatted,
+            brand != null ? brand.trim() : "",
+            model != null ? model.trim() : "",
+            color != null ? color.trim() : "",
+            new Date(System.currentTimeMillis())
+        );
+
+        try {
+            int result = carDAO.updateCar(car);
+            if (result <= 0) {
+                throw new Exception("Cập nhật xe thất bại. Xe có thể không tồn tại hoặc bạn không có quyền chỉnh sửa!");
+            }
+        } catch (Exception e) {
+            String msg = e.getMessage();
+            if (msg != null && (msg.contains("UQ_") || msg.contains("UNIQUE") || msg.contains("duplicate") || msg.contains("trùng"))) {
+                throw new Exception("Cập nhật xe thất bại. Biển số " + plateFormatted + " đã được đăng ký cho xe khác!");
+            }
+            throw e;
+        }
+    }
+
+    /**
+     * Xóa xe của khách hàng.
+     */
+    public void deleteCar(int customerId, int plateId) throws Exception {
+        try {
+            int result = carDAO.deleteCar(plateId, customerId);
+            if (result <= 0) {
+                throw new Exception("Xóa xe thất bại. Xe có thể không tồn tại hoặc bạn không có quyền xóa!");
+            }
+        } catch (Exception e) {
+            String msg = e.getMessage();
+            if (msg != null && (msg.contains("REFERENCE") || msg.contains("constraint") || msg.contains("foreign key") || msg.contains("FK_") || msg.contains("conflicted"))) {
+                throw new Exception("Không thể xóa xe này vì đang có lịch đặt rửa xe liên kết với xe. Vui lòng hủy lịch đặt trước khi xóa!");
+            }
+            throw e;
+        }
+    }
 }
+

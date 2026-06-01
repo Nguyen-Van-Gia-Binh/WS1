@@ -18,7 +18,7 @@ public class RegisterController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("register_page.jsp").forward(request, response);
+        request.getRequestDispatcher("register.jsp").forward(request, response);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class RegisterController extends HttpServlet {
         } catch (Exception e) {
             // Lưu thông báo lỗi và forward lại trang đăng ký
             request.setAttribute("ERROR", e.getMessage());
-            request.getRequestDispatcher("register_page.jsp").forward(request, response);
+            request.getRequestDispatcher("register.jsp").forward(request, response);
         }
     }
 

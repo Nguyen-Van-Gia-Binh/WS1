@@ -10,11 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 import services.CarService;
 
 /**
- * AddCarController - Xử lý thêm mới xe cho khách hàng đang đăng nhập.
- * Luồng: cars.jsp (POST form) → MainController (action=AddCar) → AddCarController → redirect ViewCars
+ * DeleteCarController - Xử lý xóa xe của khách hàng.
  */
-@WebServlet(name = "AddCarController", urlPatterns = {"/AddCarController"})
-public class AddCarController extends HttpServlet {
+@WebServlet(name = "DeleteCarController", urlPatterns = {"/DeleteCarController"})
+public class DeleteCarController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -29,19 +28,15 @@ public class AddCarController extends HttpServlet {
                 return;
             }
 
-            String licensePlate = request.getParameter("txtlicenseplate");
-            String brand        = request.getParameter("txtbrand");
-            String model        = request.getParameter("txtmodel");
-            String color        = request.getParameter("txtcolor");
+            int plateId = Integer.parseInt(request.getParameter("txtcarid"));
 
             CarService carService = new CarService();
-            carService.registerNewCar(us.getCusId(), licensePlate, brand, model, color);
+            carService.deleteCar(us.getCusId(), plateId);
             
-            String plateFormatted = licensePlate != null ? licensePlate.trim().toUpperCase() : "";
-            request.getSession().setAttribute("SUCCESS_CAR", "Đăng ký xe " + plateFormatted + " thành công!");
+            request.getSession().setAttribute("SUCCESS_CAR", "Xóa xe thành công!");
 
         } catch (Exception e) {
-            log("Error at AddCarController: " + e.toString());
+            log("Error at DeleteCarController: " + e.toString());
             request.getSession().setAttribute("ERROR_CAR", e.getMessage());
         }
 

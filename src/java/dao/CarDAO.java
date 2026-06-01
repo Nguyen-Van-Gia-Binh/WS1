@@ -62,4 +62,37 @@ public class CarDAO {
         }
         return result;
     }
+
+    // Cập nhật thông tin xe
+    public int updateCar(Car car) throws Exception {
+        int result = 0;
+        String sql = "UPDATE LicensePlates SET PlateNumber = ?, Brand = ?, Model = ?, Color = ? WHERE PlateId = ? AND UserId = ?";
+        try (Connection cn = DBUtils.getConnection();
+             PreparedStatement st = cn.prepareStatement(sql)) {
+            st.setString(1, car.getLicensePlate());
+            st.setString(2, car.getBrand());
+            st.setString(3, car.getModel());
+            st.setString(4, car.getColor());
+            st.setInt(5, car.getId());
+            st.setInt(6, car.getCustid());
+            
+            result = st.executeUpdate();
+        }
+        return result;
+    }
+
+    // Xóa xe dựa trên PlateId và UserId
+    public int deleteCar(int plateId, int userId) throws Exception {
+        int result = 0;
+        String sql = "DELETE FROM LicensePlates WHERE PlateId = ? AND UserId = ?";
+        try (Connection cn = DBUtils.getConnection();
+             PreparedStatement st = cn.prepareStatement(sql)) {
+            st.setInt(1, plateId);
+            st.setInt(2, userId);
+            
+            result = st.executeUpdate();
+        }
+        return result;
+    }
 }
+

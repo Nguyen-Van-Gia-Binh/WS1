@@ -40,6 +40,24 @@
             to   { transform: translateY(0);    opacity: 1; }
         }
         .toast-anim { animation: slideDown 0.4s ease-out; }
+        
+        /* Card action buttons styling (high-contrast theme) */
+        .btn-card-edit {
+            background: transparent !important;
+            border: 1px solid var(--color-secondary) !important;
+            color: var(--color-secondary) !important;
+        }
+        .btn-card-edit:hover {
+            background: rgba(0, 104, 122, 0.08) !important;
+        }
+        .btn-card-delete {
+            background: transparent !important;
+            border: 1px solid var(--color-error) !important;
+            color: var(--color-error) !important;
+        }
+        .btn-card-delete:hover {
+            background: rgba(186, 26, 26, 0.08) !important;
+        }
     </style>
 </head>
 <body>
@@ -174,6 +192,16 @@
                                         <span class="material-symbols-outlined" style="font-size: 16px;">phone_iphone</span>
                                         <span>Liên kết: <strong style="color: var(--color-secondary); font-family: var(--font-mono);"><%= us.getPhoneNumber() %></strong></span>
                                     </div>
+                                    <div class="vehicle-actions-row" style="margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--color-outline-variant); display: flex; gap: 8px;">
+                                        <button onclick="openEditCarModal('<%= car.getId() %>', '<%= car.getLicensePlate() %>', '<%= car.getBrand() %>', '<%= car.getModel() %>', '<%= car.getColor() %>')" class="btn-card-edit" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 4px; padding: 8px 12px; background: transparent; border: 1px solid var(--color-secondary); border-radius: 8px; color: var(--color-secondary); cursor: pointer; font-size: 13px; font-weight: 600; transition: all 0.2s;">
+                                            <span class="material-symbols-outlined" style="font-size: 16px;">edit</span>
+                                            Sửa
+                                        </button>
+                                        <button onclick="confirmDeleteCar('<%= car.getId() %>', '<%= car.getLicensePlate() %>')" class="btn-card-delete" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 4px; padding: 8px 12px; background: transparent; border: 1px solid var(--color-error); border-radius: 8px; color: var(--color-error); cursor: pointer; font-size: 13px; font-weight: 600; transition: all 0.2s;">
+                                            <span class="material-symbols-outlined" style="font-size: 16px;">delete</span>
+                                            Xóa
+                                        </button>
+                                    </div>
                                 </div>
                             </article>
                         <%  }
@@ -263,6 +291,110 @@
         </div>
     </div>
 
+    <!-- Modal Popup Sửa Xe -->
+    <div id="editCarModal" class="modal-overlay hidden" style="opacity: 0; transition: opacity 0.3s; z-index: 1000;">
+        <div class="modal-card" style="transform: scale(0.95); transition: transform 0.3s;">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <span class="material-symbols-outlined" style="color: var(--color-secondary);">edit</span> Cập nhật xe
+                </h3>
+                <button onclick="closeEditCarModal()" class="modal-close-btn">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            
+            <form id="editCarForm" action="MainController" method="post" onsubmit="return validateEditCarForm()" class="modal-form">
+                <input type="hidden" name="action" value="UpdateCar" />
+                <input type="hidden" id="editcarid" name="txtcarid" />
+                
+                <!-- Biển số xe -->
+                <div class="modal-form-group">
+                    <label class="modal-label" for="editlicenseplate">Biển số xe <span style="color: var(--color-error);">*</span></label>
+                    <input type="text" id="editlicenseplate" name="txtlicenseplate"
+                           placeholder="Ví dụ: 30A1-1234 hoặc 51F1-123.45"
+                           class="modal-input"
+                           style="text-transform: uppercase;"
+                           required />
+                    <p class="modal-input-desc">Theo chuẩn biển số Việt Nam. Ví dụ: <code>30A-999.99</code> hoặc <code>51F1-1234</code></p>
+                    <p id="editPlateError" class="modal-input-error" style="display: none;">Biển số không đúng định dạng Việt Nam!</p>
+                </div>
+                
+                <!-- Hãng xe -->
+                <div class="modal-form-group">
+                    <label class="modal-label" for="editbrand">Hãng xe</label>
+                    <select id="editbrand" name="txtbrand" class="modal-select">
+                        <option value="Toyota">Toyota</option>
+                        <option value="Honda">Honda</option>
+                        <option value="Kia">Kia</option>
+                        <option value="Hyundai">Hyundai</option>
+                        <option value="Ford">Ford</option>
+                        <option value="VinFast">VinFast</option>
+                        <option value="Mazda">Mazda</option>
+                        <option value="BMW">BMW</option>
+                        <option value="Mercedes">Mercedes</option>
+                        <option value="Audi">Audi</option>
+                        <option value="Mitsubishi">Mitsubishi</option>
+                        <option value="Nissan">Nissan</option>
+                    </select>
+                </div>
+                
+                <!-- Dòng xe -->
+                <div class="modal-form-group">
+                    <label class="modal-label" for="editmodel">Dòng xe (Model) <span style="color: var(--color-error);">*</span></label>
+                    <input type="text" id="editmodel" name="txtmodel" placeholder="Ví dụ: Camry / Civic / CX5 / VF8"
+                           class="modal-input" required />
+                </div>
+                
+                <!-- Màu xe -->
+                <div class="modal-form-group">
+                    <label class="modal-label" for="editcolor">Màu xe <span style="color: var(--color-error);">*</span></label>
+                    <input type="text" id="editcolor" name="txtcolor" placeholder="Ví dụ: Trắng / Đen / Đỏ"
+                           class="modal-input" required />
+                </div>
+                
+                <!-- Nút bấm -->
+                <div class="modal-actions">
+                    <button type="button" onclick="closeEditCarModal()" class="btn-modal-cancel">Hủy bỏ</button>
+                    <button type="submit" class="btn-modal-submit" style="background: var(--color-secondary);">
+                        <span class="material-symbols-outlined" style="font-size: 18px;">save</span>
+                        Lưu thay đổi
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Xác nhận xóa xe -->
+    <div id="deleteCarModal" class="modal-overlay hidden" style="opacity: 0; transition: opacity 0.3s; z-index: 1000;">
+        <div class="modal-card" style="transform: scale(0.95); transition: transform 0.3s; max-width: 420px;">
+            <div class="modal-header" style="border-bottom: none; padding-bottom: 0;">
+                <h3 class="modal-title" style="color: var(--color-error); display: flex; align-items: center; gap: 8px;">
+                    <span class="material-symbols-outlined" style="font-size: 28px;">warning</span> Xác nhận xóa xe
+                </h3>
+                <button onclick="closeDeleteCarModal()" class="modal-close-btn">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            
+            <div style="padding: 16px 24px; color: rgba(255, 255, 255, 0.8); font-size: 14px; line-height: 1.5;">
+                Bạn có chắc chắn muốn xóa xe mang biển số <strong id="deletePlateText" style="color: #fff; font-family: var(--font-mono); font-size: 15px;"></strong> khỏi tài khoản? Thao tác này không thể hoàn tác.
+            </div>
+            
+            <form id="deleteCarForm" action="MainController" method="post" class="modal-form" style="padding-top: 0;">
+                <input type="hidden" name="action" value="DeleteCar" />
+                <input type="hidden" id="deletecarid" name="txtcarid" />
+                
+                <div class="modal-actions" style="margin-top: 0; border-top: none;">
+                    <button type="button" onclick="closeDeleteCarModal()" class="btn-modal-cancel">Hủy bỏ</button>
+                    <button type="submit" class="btn-modal-submit" style="background: var(--color-error);">
+                        <span class="material-symbols-outlined" style="font-size: 18px;">delete_forever</span>
+                        Đồng ý xóa
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         // Auto-dismiss toasts after 5 seconds
         setTimeout(() => {
@@ -311,6 +443,74 @@
             this.value = this.value.toUpperCase();
             document.getElementById('plateError').style.display = 'none';
         });
+
+        // ==================== EDIT & DELETE VEHICLE SCRIPT ====================
+        function openEditCarModal(id, plate, brand, model, color) {
+            document.getElementById('editcarid').value = id;
+            document.getElementById('editlicenseplate').value = plate;
+            document.getElementById('editbrand').value = brand;
+            document.getElementById('editmodel').value = model;
+            document.getElementById('editcolor').value = color;
+            
+            const modal = document.getElementById('editCarModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.style.opacity = '1';
+                modal.firstElementChild.style.transform = 'scale(1)';
+            }, 10);
+        }
+
+        function closeEditCarModal() {
+            const modal = document.getElementById('editCarModal');
+            modal.style.opacity = '0';
+            modal.firstElementChild.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function validateEditCarForm() {
+            const plateInput = document.getElementById('editlicenseplate').value.trim().toUpperCase();
+            const errorEl = document.getElementById('editPlateError');
+            
+            // Regex chuẩn biển số xe Việt Nam:
+            const regex = /^\d{2}[A-Z]\d-\d{4,5}$|^\d{2}[A-Z]\d-\d{3}\.\d{2}$|^\d{2}[A-Z]-\d{4,5}$|^\d{2}[A-Z]-\d{3}\.\d{2}$/;
+            
+            if (!regex.test(plateInput)) {
+                errorEl.style.display = 'block';
+                document.getElementById('editlicenseplate').focus();
+                return false;
+            }
+            errorEl.style.display = 'none';
+            return true;
+        }
+
+        // Auto uppercase edit license plate input
+        document.getElementById('editlicenseplate').addEventListener('input', function() {
+            this.value = this.value.toUpperCase();
+            document.getElementById('editPlateError').style.display = 'none';
+        });
+
+        function confirmDeleteCar(id, plate) {
+            document.getElementById('deletecarid').value = id;
+            document.getElementById('deletePlateText').innerText = plate;
+            
+            const modal = document.getElementById('deleteCarModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.style.opacity = '1';
+                modal.firstElementChild.style.transform = 'scale(1)';
+            }, 10);
+        }
+
+        function closeDeleteCarModal() {
+            const modal = document.getElementById('deleteCarModal');
+            modal.style.opacity = '0';
+            modal.firstElementChild.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
     </script>
 </body>
 </html>

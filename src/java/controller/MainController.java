@@ -36,6 +36,10 @@ public class MainController extends HttpServlet {
                 url = "GetAllCarController";
             } else if (action.equals("AddCar")) {
                 url = "AddCarController";
+            } else if (action.equals("UpdateCar")) {
+                url = "UpdateCarController";
+            } else if (action.equals("DeleteCar")) {
+                url = "DeleteCarController";
             }
         } catch (Exception e) {
             log("Error at MainController: " + e.toString());

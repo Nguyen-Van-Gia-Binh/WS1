@@ -51,7 +51,7 @@ public class DashboardController extends HttpServlet {
             request.setAttribute("SPENT_FORMATTED",   data.getSpentFormatted());
 
             // 4. Chuyển tiếp sang View
-            request.getRequestDispatcher("customerDashboard_page.jsp").forward(request, response);
+            request.getRequestDispatcher("dashboard.jsp").forward(request, response);
 
         } catch (Exception e) {
             log("Error at DashboardController: " + e.toString());

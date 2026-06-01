@@ -10,11 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 import services.CarService;
 
 /**
- * AddCarController - Xử lý thêm mới xe cho khách hàng đang đăng nhập.
- * Luồng: cars.jsp (POST form) → MainController (action=AddCar) → AddCarController → redirect ViewCars
+ * UpdateCarController - Xử lý chỉnh sửa thông tin xe của khách hàng.
  */
-@WebServlet(name = "AddCarController", urlPatterns = {"/AddCarController"})
-public class AddCarController extends HttpServlet {
+@WebServlet(name = "UpdateCarController", urlPatterns = {"/UpdateCarController"})
+public class UpdateCarController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -29,19 +28,20 @@ public class AddCarController extends HttpServlet {
                 return;
             }
 
+            int plateId = Integer.parseInt(request.getParameter("txtcarid"));
             String licensePlate = request.getParameter("txtlicenseplate");
             String brand        = request.getParameter("txtbrand");
             String model        = request.getParameter("txtmodel");
             String color        = request.getParameter("txtcolor");
 
             CarService carService = new CarService();
-            carService.registerNewCar(us.getCusId(), licensePlate, brand, model, color);
+            carService.updateCar(us.getCusId(), plateId, licensePlate, brand, model, color);
             
             String plateFormatted = licensePlate != null ? licensePlate.trim().toUpperCase() : "";
-            request.getSession().setAttribute("SUCCESS_CAR", "Đăng ký xe " + plateFormatted + " thành công!");
+            request.getSession().setAttribute("SUCCESS_CAR", "Cập nhật thông tin xe " + plateFormatted + " thành công!");
 
         } catch (Exception e) {
-            log("Error at AddCarController: " + e.toString());
+            log("Error at UpdateCarController: " + e.toString());
             request.getSession().setAttribute("ERROR_CAR", e.getMessage());
         }
 

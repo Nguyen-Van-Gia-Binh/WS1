@@ -13,7 +13,7 @@ import services.CarService;
 
 /**
  * GetAllCarController - Lấy danh sách xe của khách hàng đang đăng nhập
- * và chuyển tiếp sang trang car_page.jsp để hiển thị.
+ * và chuyển tiếp sang trang cars.jsp để hiển thị.
  */
 @WebServlet(name = "GetAllCarController", urlPatterns = {"/GetAllCarController"})
 public class GetAllCarController extends HttpServlet {
@@ -34,9 +34,9 @@ public class GetAllCarController extends HttpServlet {
             CarService carService = new CarService();
             List<Car> listCars = carService.getCarsByCustomerId(custid);
 
-            // Truyền danh sách xe sang car_page.jsp
+            // Truyền danh sách xe sang cars.jsp
             request.setAttribute("LISTCARS", listCars);
-            request.getRequestDispatcher("car_page.jsp").forward(request, response);
+            request.getRequestDispatcher("cars.jsp").forward(request, response);
 
         } catch (Exception e) {
             log("Error at GetAllCarController: " + e.toString());

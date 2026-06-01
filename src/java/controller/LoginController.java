@@ -18,7 +18,7 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("login_page.jsp").forward(request, response);
+        request.getRequestDispatcher("login.jsp").forward(request, response);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class LoginController extends HttpServlet {
                 response.sendRedirect("MainController?action=Dashboard");
             } catch (Exception e) {
                 request.setAttribute("ERROR", e.getMessage());
-                request.getRequestDispatcher("login_page.jsp").forward(request, response);
+                request.getRequestDispatcher("login.jsp").forward(request, response);
             }
         } catch(Exception e) {
             log("Error at LoginController: " + e.toString());
