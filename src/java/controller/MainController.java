@@ -24,10 +24,6 @@ public class MainController extends HttpServlet {
         try {
             if (action == null || action.isEmpty()) {
                 url = "index.jsp";
-            } else if (action.equals("LoginPage")) {
-                url = "login_page.jsp";
-            } else if (action.equals("RegisterPage")) {
-                url = "register_page.jsp";
             } else if (action.equals("Dashboard")) {
                 url = "DashboardController";
             } else if (action.equals("Login")) {

@@ -3,9 +3,9 @@ package dao;
 import dbutils.DBUtils;
 import dto.Customer;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 
 /**
  * CustomerDAO - Lớp truy xuất dữ liệu cho bảng Users (Khách hàng)
@@ -44,13 +44,13 @@ public class CustomerDAO {
                    String name = rs.getString("FullName");
                    String password = rs.getString("Password");
                    String currentTierId = rs.getString("CurrentTierId");
-                   Date createDate = rs.getDate("CreatedAt");
+                   Timestamp createDate = rs.getTimestamp("CreatedAt");
                    String phoneVal = rs.getString("PhoneNumber");
+                   String role = rs.getString("Role");
                    int points = rs.getInt("PointsBalance");
                    double spent = rs.getDouble("TotalSpent");
                    int washes = rs.getInt("TotalWashes");
-                   // Ánh xạ Email = "" và Status = true vì bảng Users mới không chứa 2 cột này
-                   result = new Customer(cusid, name, "", password, createDate, true, phoneVal, currentTierId, points, spent, washes);
+                   result = new Customer(cusid, name, password, createDate, phoneVal, role, currentTierId, points, spent, washes);
                 }
             }
         } catch (Exception e) {
@@ -75,13 +75,13 @@ public class CustomerDAO {
                    String name = rs.getString("FullName");
                    String passwordVal = rs.getString("Password");
                    String currentTierId = rs.getString("CurrentTierId");
-                   Date createDate = rs.getDate("CreatedAt");
+                   Timestamp createDate = rs.getTimestamp("CreatedAt");
                    String phoneVal = rs.getString("PhoneNumber");
+                   String role = rs.getString("Role");
                    int points = rs.getInt("PointsBalance");
                    double spent = rs.getDouble("TotalSpent");
                    int washes = rs.getInt("TotalWashes");
-                   // Ánh xạ Email = "" và Status = true
-                   result = new Customer(cusid, name, "", passwordVal, createDate, true, phoneVal, currentTierId, points, spent, washes);
+                   result = new Customer(cusid, name, passwordVal, createDate, phoneVal, role, currentTierId, points, spent, washes);
                 }
             }
         } catch (Exception e) {

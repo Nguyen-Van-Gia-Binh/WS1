@@ -68,7 +68,9 @@ CREATE TABLE LicensePlates (
     PlateId         INT             IDENTITY(1,1) NOT NULL,
     UserId          INT             NOT NULL,
     PlateNumber     VARCHAR(20)     NOT NULL,
-    VehicleModel    NVARCHAR(100)   NULL,
+    Brand           NVARCHAR(50)    NULL,
+    Model           NVARCHAR(50)    NULL,
+    Color           NVARCHAR(30)    NULL,
     CreatedAt       DATETIME        NOT NULL DEFAULT GETDATE(),
     CONSTRAINT PK_LicensePlates PRIMARY KEY (PlateId),
     CONSTRAINT UQ_LicensePlates_PlateNumber UNIQUE (PlateNumber),
@@ -182,8 +184,8 @@ GO
 DECLARE @customerId INT;
 SELECT @customerId = UserId FROM Users WHERE PhoneNumber = '0901234567';
 
-INSERT INTO LicensePlates (UserId, PlateNumber, VehicleModel)
-VALUES (@customerId, '30A1-1234', N'Toyota - Camry (Trắng)');
+INSERT INTO LicensePlates (UserId, PlateNumber, Brand, Model, Color)
+VALUES (@customerId, '30A1-1234', N'Toyota', N'Camry', N'Trắng');
 GO
 
 -- ============================================================
@@ -192,11 +194,11 @@ GO
 DECLARE @silverId INT;
 SELECT @silverId = UserId FROM Users WHERE PhoneNumber = '0909999999';
 
-INSERT INTO LicensePlates (UserId, PlateNumber, VehicleModel)
-VALUES (@silverId, '51F1-999.99', N'Honda - Civic (Đen)');
+INSERT INTO LicensePlates (UserId, PlateNumber, Brand, Model, Color)
+VALUES (@silverId, '51F1-999.99', N'Honda', N'Civic', N'Đen');
 
-INSERT INTO LicensePlates (UserId, PlateNumber, VehicleModel)
-VALUES (@silverId, '51G1-12345', N'VinFast - VF8 (Xanh)');
+INSERT INTO LicensePlates (UserId, PlateNumber, Brand, Model, Color)
+VALUES (@silverId, '51G1-12345', N'VinFast', N'VF8', N'Xanh');
 GO
 
 -- ============================================================
@@ -205,8 +207,8 @@ GO
 DECLARE @goldId INT;
 SELECT @goldId = UserId FROM Users WHERE PhoneNumber = '0908888888';
 
-INSERT INTO LicensePlates (UserId, PlateNumber, VehicleModel)
-VALUES (@goldId, '29A1-88888', N'BMW - 520i (Xám)');
+INSERT INTO LicensePlates (UserId, PlateNumber, Brand, Model, Color)
+VALUES (@goldId, '29A1-88888', N'BMW', N'520i', N'Xám');
 GO
 
 -- ============================================================

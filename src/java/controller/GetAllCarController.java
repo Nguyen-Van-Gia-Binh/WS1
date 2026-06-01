@@ -1,6 +1,5 @@
 package controller;
 
-import dao.CarDAO;
 import dto.Car;
 import dto.Customer;
 import java.io.IOException;
@@ -10,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import services.CarService;
 
 /**
  * GetAllCarController - Lấy danh sách xe của khách hàng đang đăng nhập
@@ -26,13 +26,13 @@ public class GetAllCarController extends HttpServlet {
         try {
             Customer us = (Customer) request.getSession().getAttribute("USER");
             if (us == null) {
-                response.sendRedirect("login_page.jsp");
+                response.sendRedirect("MainController?action=Login");
                 return;
             }
 
             int custid = us.getCusId();
-            CarDAO carDAO = new CarDAO();
-            List<Car> listCars = carDAO.getAllCars(custid);
+            CarService carService = new CarService();
+            List<Car> listCars = carService.getCarsByCustomerId(custid);
 
             // Truyền danh sách xe sang car_page.jsp
             request.setAttribute("LISTCARS", listCars);

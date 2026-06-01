@@ -1,7 +1,7 @@
 package dto;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * Customer - Khách hàng DTO
@@ -9,11 +9,10 @@ import java.sql.Date;
 public class Customer implements Serializable {
     private int cusId;
     private String fullname;
-    private String email;
     private String password;
-    private Date createdAt;
-    private boolean status;
+    private Timestamp createdAt;
     private String phoneNumber;
+    private String role;
     private String currentTierId; // MEMBER, SILVER, GOLD, PLATINUM
     private int pointsBalance;
     private double totalSpent;
@@ -22,24 +21,13 @@ public class Customer implements Serializable {
     public Customer() {
     }
 
-    public Customer(int cusId, String fullname, String email, String password, Date createdAt, boolean status) {
+    public Customer(int cusId, String fullname, String password, Timestamp createdAt, String phoneNumber, String role, String currentTierId, int pointsBalance, double totalSpent, int totalWashes) {
         this.cusId = cusId;
         this.fullname = fullname;
-        this.email = email;
         this.password = password;
         this.createdAt = createdAt;
-        this.status = status;
-        this.currentTierId = "MEMBER"; // Default to MEMBER tier
-    }
-
-    public Customer(int cusId, String fullname, String email, String password, Date createdAt, boolean status, String phoneNumber, String currentTierId, int pointsBalance, double totalSpent, int totalWashes) {
-        this.cusId = cusId;
-        this.fullname = fullname;
-        this.email = email;
-        this.password = password;
-        this.createdAt = createdAt;
-        this.status = status;
         this.phoneNumber = phoneNumber;
+        this.role = role;
         this.currentTierId = currentTierId;
         this.pointsBalance = pointsBalance;
         this.totalSpent = totalSpent;
@@ -62,14 +50,6 @@ public class Customer implements Serializable {
         this.fullname = fullname;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -78,20 +58,12 @@ public class Customer implements Serializable {
         this.password = password;
     }
 
-    public Date getCreatedAt() {
+    public Timestamp getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
     }
 
     public String getPhoneNumber() {
@@ -100,6 +72,14 @@ public class Customer implements Serializable {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getCurrentTierId() {

@@ -76,7 +76,9 @@ CREATE TABLE LicensePlates (
     PlateId         INT IDENTITY(1,1)   PRIMARY KEY,
     UserId          INT                 NOT NULL,              -- Chủ xe (FK → Users)
     PlateNumber     VARCHAR(20)         NOT NULL UNIQUE,       -- Biển số xe (VD: 30A1-1234)
-    VehicleModel    NVARCHAR(100),                             -- Tên/loại xe (VD: Toyota Camry 2024)
+    Brand           NVARCHAR(50)        NULL,                  -- Thương hiệu xe
+    Model           NVARCHAR(50)        NULL,                  -- Dòng xe
+    Color           NVARCHAR(30)        NULL,                  -- Màu sắc xe
     CreatedAt       DATETIME            DEFAULT GETDATE(),
 
     CONSTRAINT FK_LicensePlates_Users FOREIGN KEY (UserId) REFERENCES Users(UserId)
@@ -187,10 +189,10 @@ GO
 -- =====================================================
 -- Biển số theo format Việt Nam: 30A1-1234
 -- =====================================================
-INSERT INTO LicensePlates (UserId, PlateNumber, VehicleModel) VALUES
-(3, '30A1-99999', N'Toyota Camry 2024'),
-(3, '51F1-12345', N'Honda Civic 2023'),
-(4, '43C2-88888', N'Mazda 3 2025');
+INSERT INTO LicensePlates (UserId, PlateNumber, Brand, Model, Color) VALUES
+(3, '30A1-99999', N'Toyota', N'Camry', N'Xám'),
+(3, '51F1-12345', N'Honda', N'Civic', N'Đen'),
+(4, '43C2-88888', N'Mazda', N'3', N'Đỏ');
 GO
 
 -- =====================================================
