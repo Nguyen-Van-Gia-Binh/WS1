@@ -133,7 +133,7 @@
                         </div>
                         <button onclick="openAddCarModal()" class="btn-header">
                             <span class="material-symbols-outlined" style="font-size: 18px;">add</span>
-                            + Đăng ký xe mới
+                             Đăng ký xe mới
                         </button>
                     </div>
 
