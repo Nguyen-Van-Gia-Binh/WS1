@@ -248,8 +248,9 @@
                 
                 <!-- Hãng xe -->
                 <div class="modal-form-group">
-                    <label class="modal-label" for="txtbrand">Hãng xe</label>
-                    <select id="txtbrand" name="txtbrand" class="modal-select">
+                    <label class="modal-label" for="txtbrand">Hãng xe <span style="color: var(--color-error);">*</span></label>
+                    <select id="txtbrand" name="txtbrand" class="modal-select" required>
+                        <option value="" disabled selected>-- Chọn hãng xe --</option>
                         <option value="Toyota">Toyota</option>
                         <option value="Honda">Honda</option>
                         <option value="Kia">Kia</option>
@@ -321,8 +322,9 @@
                 
                 <!-- Hãng xe -->
                 <div class="modal-form-group">
-                    <label class="modal-label" for="editbrand">Hãng xe</label>
-                    <select id="editbrand" name="txtbrand" class="modal-select">
+                    <label class="modal-label" for="editbrand">Hãng xe <span style="color: var(--color-error);">*</span></label>
+                    <select id="editbrand" name="txtbrand" class="modal-select" required>
+                        <option value="" disabled>-- Chọn hãng xe --</option>
                         <option value="Toyota">Toyota</option>
                         <option value="Honda">Honda</option>
                         <option value="Kia">Kia</option>
@@ -446,11 +448,11 @@
 
         // ==================== EDIT & DELETE VEHICLE SCRIPT ====================
         function openEditCarModal(id, plate, brand, model, color) {
-            document.getElementById('editcarid').value = id;
-            document.getElementById('editlicenseplate').value = plate;
-            document.getElementById('editbrand').value = brand;
-            document.getElementById('editmodel').value = model;
-            document.getElementById('editcolor').value = color;
+            document.getElementById('editcarid').value = id.trim();
+            document.getElementById('editlicenseplate').value = plate.trim();
+            document.getElementById('editbrand').value = brand.trim();
+            document.getElementById('editmodel').value = model.trim();
+            document.getElementById('editcolor').value = color.trim();
             
             const modal = document.getElementById('editCarModal');
             modal.classList.remove('hidden');

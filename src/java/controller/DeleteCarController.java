@@ -15,6 +15,17 @@ import services.CarService;
 @WebServlet(name = "DeleteCarController", urlPatterns = {"/DeleteCarController"})
 public class DeleteCarController extends HttpServlet {
 
+    /**
+     * LUỒNG XỬ LÝ 
+     * 1. Đảm bảo mã hóa UTF-8 cho request/response.
+     * 2. Kiểm tra đăng nhập: Lấy "USER" từ session. Nếu null, dùng response.sendRedirect("MainController?action=Login") để chuyển về trang đăng nhập.
+     * 3. Lấy tham số: Đọc "txtcarid" gửi từ form bằng request.getParameter, parse sang kiểu int (plateId).
+     * 4. Gọi tầng Service: Gọi CarService.deleteCar(userId, plateId) để xử lý xóa dưới DB.
+     * 5. Xử lý thông báo (Flash Message):
+     *    - Nếu thành công, setSessionAttribute("SUCCESS_CAR", "Xóa xe thành công!").
+     *    - Nếu thất bại (catch Exception), setSessionAttribute("ERROR_CAR", e.getMessage()).
+     * 6. Điều hướng: Dùng response.sendRedirect("MainController?action=ViewCars") để tránh lỗi Double Submit khi F5 trang.
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -27,9 +38,11 @@ public class DeleteCarController extends HttpServlet {
                 response.sendRedirect("MainController?action=Login");
                 return;
             }
-
+            
+            // 2. Lấy tham số
             int plateId = Integer.parseInt(request.getParameter("txtcarid"));
-
+            
+            // 3. Gọi tầng Service
             CarService carService = new CarService();
             carService.deleteCar(us.getCusId(), plateId);
             

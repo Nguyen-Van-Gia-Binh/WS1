@@ -17,6 +17,14 @@ import services.DashboardService;
 @WebServlet(name = "DashboardController", urlPatterns = {"/DashboardController"})
 public class DashboardController extends HttpServlet {
 
+    /**
+     * LUỒNG XỬ LÝ
+     * 1. Đảm bảo mã hóa UTF-8 cho request/response.
+     * 2. Kiểm tra đăng nhập: Lấy "USER" từ session. Nếu null, dùng response.sendRedirect("MainController?action=Login") để chuyển về trang đăng nhập.
+     * 3. Gọi tầng Service: Gọi DashboardService.getDashboardData(us) để lấy đối tượng DashboardData chứa toàn bộ kết quả tính toán.
+     * 4. Đặt dữ liệu vào Request Scope: Sử dụng request.setAttribute() để truyền dữ liệu sang view (bao gồm danh sách xe, thông tin hạng thẻ, phần trăm tiến trình thăng hạng, số điểm,...).
+     * 5. Điều hướng: Dùng request.getRequestDispatcher("dashboard.jsp").forward(request, response) để giữ nguyên request scope và gửi dữ liệu sang trang JSP vẽ giao diện.
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -29,7 +37,7 @@ public class DashboardController extends HttpServlet {
                 response.sendRedirect("MainController?action=Login");
                 return;
             }
-
+        
             // 2. Gọi DashboardService để tính toán dữ liệu
             DashboardService dashboardService = new DashboardService();
             DashboardData data = dashboardService.getDashboardData(us);

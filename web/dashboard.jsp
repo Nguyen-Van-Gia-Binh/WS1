@@ -206,7 +206,7 @@
                                 <span>100%</span>
                             </div>
                             <p class="progress-desc-text">
-                                <%= progressText %>
+                                <%= progressText %> 
                             </p>
                             <% if ("PLATINUM".equals(currentTierId)) { %>
                             <button class="progress-btn progress-btn-solid">

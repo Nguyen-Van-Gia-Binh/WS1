@@ -16,7 +16,26 @@ public class DashboardService {
     private final TierDAO tierDAO = new TierDAO();
 
     /**
-     * Tính toán toàn bộ thông tin loyalty và lấy danh sách xe của khách hàng.
+     * LUỒNG TÍNH TOÁN DỮ LIỆU ĐỘNG LOYALTY (DASHBOARD SERVICE):
+     * 1. Lấy danh sách xe: Gọi carDAO.getAllCars(userId) để lấy danh sách xe của khách hàng.
+     * 2. Xác định hạng hiện tại: Lấy từ us.getCurrentTierId(), mặc định là "MEMBER" nếu rỗng.
+     * 3. Lấy tất cả Hạng từ DB: Gọi tierDAO.getAllTiers() (danh sách đã được sắp xếp tăng dần theo MinWashes).
+     * 4. Tìm hạng hiện tại (currentTier) và hạng tiếp theo (nextTierObj):
+     *    - Duyệt qua danh sách tiers. Nếu trùng ID hạng hiện tại -> lưu vào currentTier.
+     *    - Nếu chưa phải hạng cuối cùng, thì phần tử tiếp theo trong list chính là nextTierObj.
+     * 5. Tính % tiến trình đến hạng kế tiếp:
+     *    - Tính phần trăm theo số lượt rửa: (currentWashes / nextTierObj.getMinWashes()) * 100
+     *    - Tính phần trăm theo chi tiêu: (currentSpent / nextTierObj.getMinSpent()) * 100
+     *    - Chọn giá trị lớn hơn làm tiến trình chính: maxProgress = Math.max(washProgress, spentProgress)
+     *    - Giới hạn tối đa là 100% bằng Math.min(100.0, ...).
+     * 6. Tính số lượng còn thiếu:
+     *    - Lượt rửa thiếu: nextTierObj.getMinWashes() - currentWashes
+     *    - Chi tiêu thiếu: nextTierObj.getMinSpent() - currentSpent
+     * 7. Tạo thông báo động (progressText) dựa vào hạng tiếp theo (SILVER, GOLD, PLATINUM).
+     * 8. Trường hợp đặc biệt (đạt hạng PLATINUM cao nhất):
+     *    - nextTierObj sẽ là null.
+     *    - Tính toán tiến trình đổi quà Nano (cần 300 điểm): maxProgress = (pointsBalance / 300.0) * 100.
+     *    - Tạo thông điệp hướng dẫn đổi quà Nano.
      */
     public DashboardData getDashboardData(Customer us) throws Exception {
         if (us == null) {
@@ -26,7 +45,7 @@ public class DashboardService {
         // 1. Lấy danh sách xe liên kết
         List<Car> carList = carDAO.getAllCars(us.getCusId());
 
-        // 2. Truy vấn thông tin Tier động từ DB (Không fix cứng)
+        // 2. Truy vấn thông tin Tier động từ DB
         String currentTierId = us.getCurrentTierId();
         if (currentTierId == null || currentTierId.isEmpty()) {
             currentTierId = "MEMBER";
@@ -79,7 +98,7 @@ public class DashboardService {
             int remainingWashes    = Math.max(0, nextTierObj.getMinWashes() - currentWashes);
             double remainingSpent  = Math.max(0.0, nextTierObj.getMinSpent() - currentSpent);
 
-            // Text mô tả quyền lợi hạng kế theo SRS
+            // Text mô tả quyền lợi hạng kế 
             String benefitText;
             switch (nextTier) {
                 case "SILVER":

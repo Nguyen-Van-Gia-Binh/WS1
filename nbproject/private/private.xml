@@ -5,19 +5,22 @@
         <group>
             <file>file:/C:/Users/nguye/Documents/Summer_2026/PRJ/WS1AutoCarProject/src/java/controller/RegisterController.java</file>
             <file>file:/C:/Users/nguye/Documents/Summer_2026/PRJ/WS1AutoCarProject/src/java/services/DashboardService.java</file>
-            <file>file:/C:/Users/nguye/Documents/Summer_2026/PRJ/WS1AutoCarProject/web/cars.jsp</file>
             <file>file:/C:/Users/nguye/Documents/Summer_2026/PRJ/WS1AutoCarProject/src/java/controller/UpdateCarController.java</file>
-            <file>file:/C:/Users/nguye/Documents/Summer_2026/PRJ/WS1AutoCarProject/src/java/services/CarService.java</file>
             <file>file:/C:/Users/nguye/Documents/Summer_2026/PRJ/WS1AutoCarProject/src/java/controller/GetAllCarController.java</file>
-            <file>file:/C:/Users/nguye/Documents/Summer_2026/PRJ/WS1AutoCarProject/src/java/services/CustomerService.java</file>
+            <file>file:/C:/Users/nguye/Documents/Summer_2026/PRJ/WS1AutoCarProject/src/java/dto/DashboardData.java</file>
             <file>file:/C:/Users/nguye/Documents/Summer_2026/PRJ/WS1AutoCarProject/src/java/controller/DashboardController.java</file>
+            <file>file:/C:/Users/nguye/Documents/Summer_2026/PRJ/WS1AutoCarProject/src/java/practice/PracticeMainController.java</file>
             <file>file:/C:/Users/nguye/Documents/Summer_2026/PRJ/WS1AutoCarProject/src/java/dao/CustomerDAO.java</file>
-            <file>file:/C:/Users/nguye/Documents/Summer_2026/PRJ/WS1AutoCarProject/src/java/controller/AddCarController.java</file>
+            <file>file:/C:/Users/nguye/Documents/Summer_2026/PRJ/WS1AutoCarProject/src/java/dto/Car.java</file>
+            <file>file:/C:/Users/nguye/Documents/Summer_2026/PRJ/WS1AutoCarProject/src/java/dto/Customer.java</file>
             <file>file:/C:/Users/nguye/Documents/Summer_2026/PRJ/WS1AutoCarProject/src/java/controller/MainController.java</file>
+            <file>file:/C:/Users/nguye/Documents/Summer_2026/PRJ/WS1AutoCarProject/src/java/practice/PracticeDAO.java</file>
+            <file>file:/C:/Users/nguye/Documents/Summer_2026/PRJ/WS1AutoCarProject/src/java/controller/AddCarController.java</file>
             <file>file:/C:/Users/nguye/Documents/Summer_2026/PRJ/WS1AutoCarProject/src/java/dao/CarDAO.java</file>
             <file>file:/C:/Users/nguye/Documents/Summer_2026/PRJ/WS1AutoCarProject/web/dashboard.jsp</file>
+            <file>file:/C:/Users/nguye/Documents/Summer_2026/PRJ/WS1AutoCarProject/src/java/practice/PracticeCarService.java</file>
             <file>file:/C:/Users/nguye/Documents/Summer_2026/PRJ/WS1AutoCarProject/src/java/controller/LogoutController.java</file>
-            <file>file:/C:/Users/nguye/Documents/Summer_2026/PRJ/WS1AutoCarProject/src/java/dao/TierDAO.java</file>
+            <file>file:/C:/Users/nguye/Documents/Summer_2026/PRJ/WS1AutoCarProject/src/java/controller/LoginController.java</file>
         </group>
     </open-files>
 </project-private>

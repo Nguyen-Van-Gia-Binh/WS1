@@ -27,10 +27,10 @@ public class CarDAO {
           try (ResultSet table = st.executeQuery()) {
               while (table.next()) {
                  int plateId = table.getInt("PlateId");
-                 String plateNum = table.getString("PlateNumber");
-                 String brandVal = table.getString("Brand");
-                 String modelVal = table.getString("Model");
-                 String colorVal = table.getString("Color");
+                 String plateNum = table.getString("PlateNumber") != null ? table.getString("PlateNumber").trim() : "";
+                 String brandVal = table.getString("Brand") != null ? table.getString("Brand").trim() : "";
+                 String modelVal = table.getString("Model") != null ? table.getString("Model").trim() : "";
+                 String colorVal = table.getString("Color") != null ? table.getString("Color").trim() : "";
                  Date createdAt = table.getDate("CreatedAt");
                  
                  Car c = new Car(plateId, custid, plateNum, brandVal, modelVal, colorVal, createdAt);
@@ -63,7 +63,21 @@ public class CarDAO {
         return result;
     }
 
-    // Cập nhật thông tin xe
+    /**
+     * 1. Viết lệnh SQL: UPDATE LicensePlates SET PlateNumber = ?, Brand = ?, Model = ?, Color = ? WHERE PlateId = ? AND UserId = ?
+     *    (WHERE cả ID xe và ID User để tránh việc cập nhật xe của người khác).
+     * 2. Mở Connection từ DBUtils.getConnection().
+     * 3. Chuẩn bị PreparedStatement.
+     * 4. Gán tham số theo thứ tự dấu hỏi:
+     *    - st.setString(1, car.getLicensePlate());
+     *    - st.setString(2, car.getBrand());
+     *    - st.setString(3, car.getModel());
+     *    - st.setString(4, car.getColor());
+     *    - st.setInt(5, car.getId()); // PlateId
+     *    - st.setInt(6, car.getCustid()); // UserId
+     * 5. Thực thi câu lệnh: Gọi st.executeUpdate() để ghi dữ liệu xuống database và trả về số dòng bị ảnh hưởng.
+     * 6. Đóng kết nối: Tự động đóng Connection và PreparedStatement nhờ cấu trúc try-with-resources.
+     */
     public int updateCar(Car car) throws Exception {
         int result = 0;
         String sql = "UPDATE LicensePlates SET PlateNumber = ?, Brand = ?, Model = ?, Color = ? WHERE PlateId = ? AND UserId = ?";
@@ -81,7 +95,16 @@ public class CarDAO {
         return result;
     }
 
-    // Xóa xe dựa trên PlateId và UserId
+    /**
+     * 1. Viết lệnh SQL: DELETE FROM LicensePlates WHERE PlateId = ? AND UserId = ?
+     *    (Phải WHERE cả UserId của người đăng nhập để đảm bảo họ chỉ được xóa xe của chính họ).
+     * 2. Mở Connection từ DBUtils và chuẩn bị PreparedStatement.
+     * 3. Set các tham số (?, ?):
+     *    - st.setInt(1, plateId);
+     *    - st.setInt(2, userId);
+     * 4. Thực thi câu lệnh: Gọi st.executeUpdate() và trả về số dòng bị xóa (thành công trả về 1, thất bại trả về 0).
+     * 5. Đóng tài nguyên: Sử dụng cấu trúc try-with-resources để tự động giải phóng tài nguyên.
+     */
     public int deleteCar(int plateId, int userId) throws Exception {
         int result = 0;
         String sql = "DELETE FROM LicensePlates WHERE PlateId = ? AND UserId = ?";
